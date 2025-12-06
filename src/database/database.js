@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import test from 'node:test';
 
 export class Database {
     #database = {};
@@ -31,8 +32,17 @@ export class Database {
 
     }
 
-    select(table) {
-        const data = this.#database[table] ?? [];
+    select(table, filters) {
+        let data = this.#database[table] ?? [];
+
+        if(filters) {
+            data = data.filter((item) => {
+                return Object.entries(filters).some(([key, value]) => {
+                    return item[key].toLowerCase().includes(value.toLowerCase());
+                });
+            });
+        }
+
         return data;
     }
 
