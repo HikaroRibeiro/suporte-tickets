@@ -12,10 +12,10 @@ export function routerHandler(request, response) {
     if (route) {
         const routeParams = request.url.match(route.path);
 
-        const { query } = routeParams.groups;
+        // Recuperada os parâmetros nomeados da rota.
+        const { query, ...params } = routeParams.groups;
 
-        //console.log(extractQueryParams(query || ''));
-
+        request.params = params || {};
         request.query = query ? extractQueryParams(query) : {};
 
         return route.controller({request, response, database});
